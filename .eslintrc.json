@@ -3,6 +3,39 @@
   "rules": {
     "react/no-unescaped-entities": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "lodash",
+            "message": "Prefer importing individual functions from \"lodash\". Eg. import uniqBy from \"lodash/uniqBy\""
+          },
+          {
+            "name": "@trpc/server",
+            "message": "Please take caution when importing from server trpc on client side. If you wanted to import types, make sure to prefix import with \"type\"",
+            "allowTypeImports": true
+          }
+        ],
+        "patterns": [
+          {
+            "group": ["**/server/**/*"],
+            "message": "Please take caution when importing from server on client side. If you wanted to import types, make sure to prefix import with \"type\"",
+            "allowTypeImports": true
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      // Ref: https://github.com/import-js/eslint-plugin-import#typescript
+      "typescript": true,
+      "node": true
+    }
   }
 }

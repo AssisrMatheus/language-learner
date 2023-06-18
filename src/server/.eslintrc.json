@@ -1,0 +1,7 @@
+{
+  "rules": {
+    // Api pages are server side and can import server stuff
+    "import/no-restricted-paths": "off",
+    "@typescript-eslint/no-restricted-imports": "off"
+  }
+}
