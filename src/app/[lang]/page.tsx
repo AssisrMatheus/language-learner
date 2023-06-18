@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SupportedLocales, getDictionary } from '@/dictionaries';
+import Ai from './ai';
 
 export default async function Home({ params: { lang } }: { params: { lang: SupportedLocales } }) {
   const dict = await getDictionary(lang);
@@ -14,10 +15,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Suppo
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <section>
-        <form action={search} className="flex w-full max-w-lg items-center space-x-2">
-          <Input className="" type="text" placeholder="Write your verb" name="search" />
-          <Button type="submit">{dict.home.searchAction}</Button>
-        </form>
+        <Ai dict={dict.home} />
       </section>
     </main>
   );
