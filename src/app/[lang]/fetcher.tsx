@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
-import { AvailableConjugationLanguages, availableConjugationLanguages } from '@/lib/third-party/reverso';
+import type { AvailableConjugationLanguages } from '@/lib/third-party/reverso';
 import { trpc } from '@/lib/trpc';
 import Cards from './cards';
 
@@ -76,7 +76,7 @@ export default function Fetcher({
           emptyState={dict.fetcher.selectorEmptyState}
           placeholder={dict.fetcher.selectorPlaceholder}
           searchPlaceholder={dict.fetcher.selectorSearchPlaceholder}
-          options={Object.values(availableConjugationLanguages).map((language) => ({
+          options={Object.keys(labelForLanguage).map((language) => ({
             value: language,
             label: labelForLanguage[language as AvailableConjugationLanguages]
           }))}

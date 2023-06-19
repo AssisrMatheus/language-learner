@@ -13,6 +13,8 @@ function getLocale(request: NextRequest) {
 }
 
 export function middleware(request: NextRequest) {
+  console.log('middleware', request.nextUrl.pathname);
+
   // Check if there is any supported locale in the pathname
   const pathname = request.nextUrl.pathname;
   const pathnameIsMissingLocale = supportedLocales.every(

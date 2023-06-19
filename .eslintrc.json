@@ -17,6 +17,11 @@
             "name": "@trpc/server",
             "message": "Please take caution when importing from server trpc on client side. If you wanted to import types, make sure to prefix import with \"type\"",
             "allowTypeImports": true
+          },
+          {
+            "name": "@/lib/third-party/reverso",
+            "message": "Please take caution when importing from server on client side. If you wanted to import types, make sure to prefix import with \"type\"",
+            "allowTypeImports": true
           }
         ],
         "patterns": [
