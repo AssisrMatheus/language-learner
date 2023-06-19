@@ -55,7 +55,7 @@ export default function Fetcher({
             push(`${pathname}?${searchParams.toString()}`);
           }
         }}
-        className="flex w-full mx-auto max-w-lg items-center space-x-2"
+        className="mx-auto flex w-full max-w-lg items-center space-x-2"
       >
         <Input placeholder={dict.fetcher.searchPlaceholder} disabled={isFetching} name="search" />
         <Combobox

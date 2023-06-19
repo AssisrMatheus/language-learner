@@ -26,7 +26,7 @@ export default function Card({
       variants={container}
       initial="notFlipped"
       animate={flipped ? 'flipped' : 'notFlipped'}
-      className="p-4 border border-black dark:border-white rounded-lg"
+      className="rounded-lg border border-black p-4 dark:border-white"
     >
       <div style={flipped ? { transform: 'rotateY(180deg)' } : undefined}>
         {data.phrase.map((phrase) => (

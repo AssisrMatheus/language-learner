@@ -14,7 +14,7 @@ export default function Cards({ data }: { data?: RouterOutput['verbs']['conjugat
             data.tenses.map((tense) => (
               <div key={tense.tense}>
                 <Lead className="mb-4">{tense.tense}</Lead>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {tense.verbs.map((verb) => (
                     <Card key={verb.phrase.join('')} data={verb} tense={tense.tense} />
                   ))}

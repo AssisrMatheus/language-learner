@@ -8,7 +8,7 @@ export default async function Home({ params: { lang } }: { params: { lang: Suppo
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <section>
-        <H3 className="text-center mb-8">{dict.home.title}</H3>
+        <H3 className="mb-8 text-center">{dict.home.title}</H3>
         <Fetcher dict={{ fetcher: dict.fetcher }} />
       </section>
     </main>
