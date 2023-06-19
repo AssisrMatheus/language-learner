@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envVariables = z.object({
-  OPENAI_API_KEY: z.string().min(1)
+  OPENAI_API_KEY: z.string().optional()
 });
 
 envVariables.parse(process.env);
