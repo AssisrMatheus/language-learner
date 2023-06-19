@@ -6,10 +6,31 @@ export const verbsRouter = router({
   conjugate: publicProcedure
     .input(
       z.object({
-        verb: z.string()
+        search: z.string(),
+        language: z.enum([
+          'english',
+          'russian',
+          'french',
+          'spanish',
+          'german',
+          'italian',
+          'portuguese',
+          'hebrew',
+          'arabic',
+          'japanese'
+        ])
       })
     )
     .mutation(async ({ input }) => {
-      return reverso.conjugate(input.verb, 'french');
+      const verbs = await reverso.conjugate(input.search, input.language);
+
+      // const promises = verbs.map(async (verb) => {
+      //   const context = await reverso.context(verb.phrase.join(''), input.language, 'english');
+      //   console.log(context);
+      // });
+
+      // await Promise.all(promises);
+
+      return verbs;
     })
 });
