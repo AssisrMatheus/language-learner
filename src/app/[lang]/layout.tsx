@@ -3,6 +3,7 @@ import { SupportedLocales } from '@/dictionaries';
 import './../globals.css';
 import { Inter } from 'next/font/google';
 import Providers from './providers';
+import DarkMode from './dark-mode';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang={params.lang}>
       <body className={inter.className}>
+        <DarkMode />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -51,13 +51,21 @@ const api = {
     const { document } = window;
     const conjugations: {
       url: string;
-      verbTense?: string;
-      phrase: string[];
-      verb?: string;
-    }[] = [];
+      tenses: { tense: string; verbs: { phrase: string[]; verb?: string }[] }[];
+    } = {
+      url: url.toString(),
+      tenses: []
+    };
 
     document.querySelectorAll('div[class="blue-box-wrap"]').forEach((wrapperElement) => {
       const verbTense = wrapperElement.attributes.getNamedItem('mobile-title')?.value.trim();
+
+      if (!verbTense) throw new Error(`Verb tense not found for ${verb}`);
+
+      const tense: (typeof conjugations)['tenses'][number] = {
+        tense: verbTense,
+        verbs: []
+      };
 
       wrapperElement.querySelectorAll(`li`).forEach((verbLineElement) => {
         const phrase: string[] = [];
@@ -72,15 +80,12 @@ const api = {
           verb = verbLineElement.querySelector(`i[class^="hglhOver"]`)?.textContent;
         }
 
-        if (!verb) console.warn(`Verb not found for ${verbTense}: ${phrase.join('')}`);
+        if (!verb) throw new Error(`Verb not found for ${verbTense}: ${phrase.join('')}`);
 
-        conjugations.push({
-          url: url.toString(),
-          verbTense,
-          phrase,
-          verb: verb || undefined
-        });
+        tense.verbs.push({ phrase, verb });
       });
+
+      conjugations.tenses.push(tense);
     });
 
     window.close();

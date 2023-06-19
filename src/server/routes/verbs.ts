@@ -21,7 +21,7 @@ export const verbsRouter = router({
         ])
       })
     )
-    .mutation(async ({ input }) => {
+    .query(async ({ input }) => {
       const verbs = await reverso.conjugate(input.search, input.language);
 
       // const promises = verbs.map(async (verb) => {

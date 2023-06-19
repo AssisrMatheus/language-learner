@@ -5,9 +5,36 @@ import { Combobox } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
 import { AvailableConjugationLanguages } from '@/lib/third-party/reverso';
 import { trpc } from '@/lib/trpc';
+import Cards from './cards';
 
-export default function Fetcher({ dict }: { dict: any }) {
-  const { data, mutate, isLoading } = trpc.verbs.conjugate.useMutation();
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
+export default function Fetcher({
+  dict
+}: {
+  dict: {
+    fetcher: {
+      searchPlaceholder: string;
+      selectorEmptyState: string;
+      selectorPlaceholder: string;
+      selectorSearchPlaceholder: string;
+      searchAction: string;
+    };
+  };
+}) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
+
+  const { data, isFetching } = trpc.verbs.conjugate.useQuery(
+    {
+      search: searchParams.get('search') as string,
+      language: searchParams.get('language') as AvailableConjugationLanguages
+    },
+    {
+      enabled: !!searchParams.get('search') && !!searchParams.get('language')
+    }
+  );
 
   return (
     <>
@@ -22,27 +49,30 @@ export default function Fetcher({ dict }: { dict: any }) {
           };
 
           if (form.language && form.search) {
-            mutate(form);
+            const searchParams = new URLSearchParams();
+            searchParams.set('search', form.search);
+            searchParams.set('language', form.language);
+            push(`${pathname}?${searchParams.toString()}`);
           }
         }}
         className="flex w-full mx-auto max-w-lg items-center space-x-2"
       >
-        <Input placeholder="Say something..." disabled={isLoading} name="search" />
+        <Input placeholder={dict.fetcher.searchPlaceholder} disabled={isFetching} name="search" />
         <Combobox
           name="language"
-          emptyState="No results"
-          placeholder="Language"
-          searchPlaceholder="Search..."
+          emptyState={dict.fetcher.selectorEmptyState}
+          placeholder={dict.fetcher.selectorPlaceholder}
+          searchPlaceholder={dict.fetcher.selectorSearchPlaceholder}
           options={[
             { value: 'french', label: '🇫🇷' },
             { value: 'portuguese', label: '🇧🇷' }
           ]}
         />
-        <Button type="submit" disabled={isLoading}>
-          {dict.searchAction}
+        <Button type="submit" disabled={isFetching}>
+          {dict.fetcher.searchAction}
         </Button>
       </form>
-      {data && <code>{JSON.stringify(data, null, 2)}</code>}
+      <Cards isLoading={isFetching} data={data} />
     </>
   );
 }
