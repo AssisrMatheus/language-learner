@@ -3,11 +3,24 @@
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
-import { AvailableConjugationLanguages } from '@/lib/third-party/reverso';
+import { AvailableConjugationLanguages, availableConjugationLanguages } from '@/lib/third-party/reverso';
 import { trpc } from '@/lib/trpc';
 import Cards from './cards';
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
+const labelForLanguage: { [key in AvailableConjugationLanguages]: React.ReactNode } = {
+  arabic: '🇸🇦',
+  english: '🇬🇧',
+  french: '🇫🇷',
+  german: '🇩🇪',
+  hebrew: '🇮🇱',
+  italian: '🇮🇹',
+  japanese: '🇯🇵',
+  portuguese: '🇧🇷',
+  russian: '🇷🇺',
+  spanish: '🇪🇸'
+};
 
 export default function Fetcher({
   dict
@@ -63,10 +76,10 @@ export default function Fetcher({
           emptyState={dict.fetcher.selectorEmptyState}
           placeholder={dict.fetcher.selectorPlaceholder}
           searchPlaceholder={dict.fetcher.selectorSearchPlaceholder}
-          options={[
-            { value: 'french', label: '🇫🇷' },
-            { value: 'portuguese', label: '🇧🇷' }
-          ]}
+          options={Object.values(availableConjugationLanguages).map((language) => ({
+            value: language,
+            label: labelForLanguage[language as AvailableConjugationLanguages]
+          }))}
         />
         <Button type="submit" disabled={isFetching}>
           {dict.fetcher.searchAction}
