@@ -1,21 +1,16 @@
-import { match } from '@formatjs/intl-localematcher';
-import Negotiator from 'negotiator';
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { SupportedLocales, getDictionary } from '@/dictionaries';
+import Fetcher from './fetcher';
+import { H3 } from '@/components/ui/typography/h3';
 
-const supportedLocales = ['en']; // Supported locales
-const defaultLocale = 'en';
+export default async function Home({ params: { lang } }: { params: { lang: SupportedLocales } }) {
+  const dict = await getDictionary(lang);
 
-// Get the preferred locale, similar to above or using a library
-function getLocale(acceptLanguage: string | undefined) {
-  const languages = new Negotiator({
-    headers: { 'accept-language': acceptLanguage || undefined }
-  }).languages();
-  return match(languages, supportedLocales, defaultLocale);
-}
-
-export default async function Profile() {
-  const acceptLanguage = headers().get('accept-language');
-  const locale = getLocale(acceptLanguage || undefined);
-  redirect(`/${locale}`);
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <section>
+        <H3 className="mb-8 text-center">{dict.home.title}</H3>
+        <Fetcher dict={{ fetcher: dict.fetcher }} />
+      </section>
+    </main>
+  );
 }
