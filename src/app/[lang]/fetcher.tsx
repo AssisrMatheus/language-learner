@@ -3,11 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
+import { useSearch } from '@/lib/search';
 import type { AvailableConjugationLanguages } from '@/lib/third-party/reverso';
 import { trpc } from '@/lib/trpc';
+import { z } from 'zod';
 import Cards from './cards';
-
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 const labelForLanguage: { [key in AvailableConjugationLanguages]: React.ReactNode } = {
   arabic: '🇸🇦',
@@ -35,17 +35,23 @@ export default function Fetcher({
     };
   };
 }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { push } = useRouter();
+  const {
+    params: { language, search },
+    setSearch
+  } = useSearch(
+    z.object({
+      search: z.string(),
+      language: z.string()
+    })
+  );
 
   const { data, isFetching } = trpc.verbs.conjugate.useQuery(
     {
-      search: searchParams.get('search') as string,
-      language: searchParams.get('language') as AvailableConjugationLanguages
+      search: search!,
+      language: language! as AvailableConjugationLanguages
     },
     {
-      enabled: !!searchParams.get('search') && !!searchParams.get('language')
+      enabled: !!search && !!language
     }
   );
 
@@ -62,10 +68,7 @@ export default function Fetcher({
           };
 
           if (form.language && form.search) {
-            const searchParams = new URLSearchParams();
-            searchParams.set('search', form.search);
-            searchParams.set('language', form.language);
-            push(`${pathname}?${searchParams.toString()}`);
+            setSearch(form);
           }
         }}
         className="mx-auto flex w-full max-w-lg items-center space-x-2"
